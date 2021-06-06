@@ -1,0 +1,14 @@
+# Spring Boot 2.4以降でincludeが利用できなくなったため、spring.profiles.groupを利用する。
+# https://spring.io/blog/2020/08/14/config-file-processing-in-spring-boot-2-4
+
+spring:
+  profiles:
+    group:
+      local:
+        - common
+        - local
+        - mail-local
+      staging:
+        - common
+        - staging
+        - mail-local

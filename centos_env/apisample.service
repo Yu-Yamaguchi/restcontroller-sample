@@ -1,0 +1,14 @@
+[Unit]
+Description=This is a sample RestController using Spring Boot.
+After=syslog.target
+
+[Service]
+ExecStart = /usr/local/spring/startup.sh
+Restart = always
+Type = simple
+User = application
+Group = application
+SuccessExitStatus = 143
+
+[Install]
+WantedBy=multi-user.target

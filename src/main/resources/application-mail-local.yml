@@ -1,0 +1,3 @@
+mail-settings:
+  from-address: hoge-from@example.com
+  to-address: hoge-to@example.com

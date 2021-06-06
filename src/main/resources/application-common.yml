@@ -1,0 +1,11 @@
+# 環境共通の定義
+
+logging:
+  config: classpath:logback-spring.xml
+
+spring:
+  jackson:
+    parser:
+      allow-unquoted-field-names: true
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Tokyo
