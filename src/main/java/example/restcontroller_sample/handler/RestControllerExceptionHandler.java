@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -52,7 +51,7 @@ public class RestControllerExceptionHandler {
 		mail.send("パラメータの検証エラー", response.toString());
 		return response;
 	}
-	
+
 	@ExceptionHandler(InvalidFormatException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorResponse handleInvalidFormatException(InvalidFormatException e) {
@@ -82,18 +81,10 @@ public class RestControllerExceptionHandler {
 	 * @return {@link ErrorResponse}
 	 */
 	@ExceptionHandler
-	public ResponseEntity<ErrorResponse> handleException(Exception e) {
-		var innerEx = e.getCause();
-		if (innerEx instanceof InvalidFormatException) {
-			var response = new ErrorResponse(920, innerEx.getMessage());
-			logger.error(innerEx.toString());
-			mail.send("パラメータの検証エラー", innerEx.toString());
-			return ResponseEntity.badRequest().body(response);
-		} else {
-			var response = new ErrorResponse(999, e.getMessage());
-			logger.error(e.toString());
-			mail.send("システムエラー", e.toString());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-		}
+	public ErrorResponse handleException(Exception e) {
+		var response = new ErrorResponse(999, e.getMessage());
+		logger.error(e.toString());
+		mail.send("システムエラー", e.toString());
+		return response;
 	}
 }
