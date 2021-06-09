@@ -117,6 +117,6 @@ public class LogAop {
 	 * @return 文字列の戻り値
 	 */
 	private String getReturnValue(Object returnValue) {
-		return (returnValue != null) ? returnValue.toString() : "return value is null";
+		return (returnValue != null) ? returnValue.toString() : "戻り値はなし";
 	}
 }
