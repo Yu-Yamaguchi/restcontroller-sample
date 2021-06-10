@@ -22,6 +22,7 @@ public class Application {
 	/** ログ */
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+	/** 開発環境用のメールサーバ */
 	private GreenMail smtp = null;
 	
 	@Autowired
