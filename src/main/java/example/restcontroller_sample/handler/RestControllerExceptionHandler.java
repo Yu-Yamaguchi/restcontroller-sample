@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -52,15 +53,6 @@ public class RestControllerExceptionHandler {
 		return response;
 	}
 
-	@ExceptionHandler(InvalidFormatException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ErrorResponse handleInvalidFormatException(InvalidFormatException e) {
-		var response = new ErrorResponse(920, e.getMessage());
-		logger.error(e.toString());
-		mail.send("フォーマット検証エラー", e.toString());
-		return response;
-	}
-
 	/**
 	 * その他、Exception全般をハンドルする。
 	 * @param e
@@ -71,7 +63,7 @@ public class RestControllerExceptionHandler {
 	public ErrorResponse handleEntityNotFoundException(EntityNotFoundException e) {
 		var response = new ErrorResponse(930, e.getMessage());
 		logger.error(e.toString());
-		mail.send("EntityNotFound", e.toString());
+		mail.send("EntityNotFoundエラー", e.toString());
 		return response;
 	}
 
@@ -81,10 +73,18 @@ public class RestControllerExceptionHandler {
 	 * @return {@link ErrorResponse}
 	 */
 	@ExceptionHandler
-	public ErrorResponse handleException(Exception e) {
-		var response = new ErrorResponse(999, e.getMessage());
-		logger.error(e.toString());
-		mail.send("システムエラー", e.toString());
-		return response;
+	public ResponseEntity<ErrorResponse> handleException(Exception e) {
+		var innerEx = e.getCause();
+		if (innerEx instanceof InvalidFormatException) {
+			var response = new ErrorResponse(920, innerEx.getMessage());
+			logger.error(innerEx.toString());
+			mail.send("フォーマット検証エラー", innerEx.toString());
+			return ResponseEntity.badRequest().body(response);
+		} else {
+			var response = new ErrorResponse(999, e.getMessage());
+			logger.error(e.toString());
+			mail.send("予期せぬエラー", e.toString());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+		}
 	}
 }

@@ -64,7 +64,7 @@ public class TodoControllerITForMail {
 		
 		assertThat(msg.getAllRecipients()[0].toString()).isEqualTo("hoge-to@example.com");
 
-		assertThat(msg.getSubject()).isEqualTo("パラメータの検証エラー");
+		assertThat(msg.getSubject()).isEqualTo("フォーマット検証エラー");
 		
 		assertThat(mailBody).contains("Cannot deserialize value of type `java.util.Date`");
 		assertThat(mailBody).contains("yyyy-MM-dd");
