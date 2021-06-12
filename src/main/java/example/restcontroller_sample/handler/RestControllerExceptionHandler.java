@@ -31,6 +31,7 @@ public class RestControllerExceptionHandler {
 	/** ログ */
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+	/** 開発・テスト用のメールサーバ */
 	@Autowired
 	private SpringBootMail mail;
 
